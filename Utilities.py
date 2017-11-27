@@ -30,7 +30,7 @@ class FileUtilities(object):
 			df = self.read_csv(self.path+file)
 			label = str(str(file).split('_')[3])
 			self.labels.append(label)
-			# print("Reading " + str(file) + "...")
+			print("Reading " + str(file) + "...")
 			data = self.get_data_matrix(df)
 			self.data_matrices.append(data)
 		print("FileUtilities::get_data_matrices read %d files" %(len(self.data_matrices)))

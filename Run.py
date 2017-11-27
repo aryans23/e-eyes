@@ -82,49 +82,61 @@ from Utilities import EarthMovingDistance
 # plt.bar(pos, freq, width)
 # plt.show()
 
-# print(amplitude_matrices[1].shape)
-# freq = np.zeros(40)
-# for i in amplitude_matrices[1]:
-# 	for j in i:
-# 		freq[int(j)] += 1
-# print(freq)
-# plt.figure(figsize=(12,6))
-# plt.title('Amplitude bins and counts')
-# plt.xlabel('Bins')
-# plt.ylabel('Amplitude Counts')
-# plt.grid(True)
-# pos = np.arange(freq.shape[0])
-# width = 1.0
-# ax = plt.axes()
-# ax.set_xticks(pos)
-# ax.set_xticklabels(pos)
-# plt.bar(pos, freq, width, color = 'g')
-# plt.show()
+##################
+
+# path = '/Users/Apple/Documents/gitRepo/ra-eeyes-activity-detection/data_input/'
+# utl = FileUtilities(path)
+# amplitude_matrices = utl.get_amplitude_matrices()
+# print("Number of matrices read = ", len(amplitude_matrices))
+
+# histograms = []
+# for amplitude_matrix in amplitude_matrices:
+# 	for i in amplitude_matrix:
+# 		freq = np.zeros(40)
+# 		for j in i:
+# 			freq[int(j)] += 1
+# 	histograms.append(freq)
+
+# labels_np = np.array(utl.labels)
+# print(utl.labels)
+# emd = EarthMovingDistance(histograms)
+# emd_matrix = emd.get_EMD_matrix()
+# closest_activity = emd.get_closest_activity()
+# predicted = labels_np[closest_activity]
+# print("______________________ EMD matrix start ______________________")
+# print(emd_matrix)
+# print("______________________ EMD matrix ends _______________________")
+# print("___________________ closest_activity start ___________________")
+# print(predicted)
+# print("___________________ closest_activity ends ____________________")
 
 ##################
 
-path = '/Users/Apple/Documents/gitRepo/ra-eeyes-activity-detection/data_input/'
-utl = FileUtilities(path)
-amplitude_matrices = utl.get_amplitude_matrices()
-print("Number of matrices read = ", len(amplitude_matrices))
+# path = '/Users/Apple/Documents/gitRepo/ra-eeyes-activity-detection/data_small/'
+# utl = FileUtilities(path)
+# amplitude_matrices = utl.get_amplitude_matrices()
+# print("Number of matrices read = ", len(amplitude_matrices))
+# labels_np = np.array(utl.labels)
 
-histograms = []
-for amplitude_matrix in amplitude_matrices:
-	for i in amplitude_matrix:
-		freq = np.zeros(40)
-		for j in i:
-			freq[int(j)] += 1
-	histograms.append(freq)
+# histograms = []
+# for amplitude_matrix in amplitude_matrices:
+# 	for i in amplitude_matrix:
+# 		freq = np.zeros(40)
+# 		for j in i:
+# 			freq[int(j)] += 1
+# 	histograms.append(freq)
 
-labels_np = np.array(utl.labels)
-print(utl.labels)
-emd = EarthMovingDistance(histograms)
-emd_matrix = emd.get_EMD_matrix()
-closest_activity = emd.get_closest_activity()
-predicted = labels_np[closest_activity]
-print("______________________ EMD matrix start ______________________")
-print(emd_matrix)
-print("______________________ EMD matrix ends _______________________")
-print("___________________ closest_activity start ___________________")
-print(predicted)
-print("___________________ closest_activity ends ____________________")
+# for n, freq in enumerate(histograms):
+# 	ax = plt.subplot(len(histograms), 1, n+1)
+# 	plt.title(labels_np[n])
+# 	plt.xlabel('Bins')
+# 	plt.ylabel('Amplitude Counts')
+# 	plt.grid(True)
+# 	width = 1.0
+# 	pos = np.arange(freq.shape[0])
+# 	plt.bar(pos, freq, width)
+
+# plt.show()
+
+
+
