@@ -14,6 +14,7 @@ class FileUtilities(object):
 		self.path = path
 		self.data_matrices = []
 		self.amplitude = []
+		self.labels = []
 		print("FileUtilities initialized")
 		
 	def read_csv(self,file):
@@ -27,8 +28,12 @@ class FileUtilities(object):
 		files = os.listdir(self.path)
 		for file in files:
 			df = self.read_csv(self.path+file)
+			label = str(str(file).split('_')[3])
+			self.labels.append(label)
+			# print("Reading " + str(file) + "...")
 			data = self.get_data_matrix(df)
 			self.data_matrices.append(data)
+		print("FileUtilities::get_data_matrices read %d files" %(len(self.data_matrices)))
 		return self.data_matrices
 
 	def get_amplitude_matrices(self):
@@ -74,6 +79,7 @@ class EarthMovingDistance(object):
 		super(EarthMovingDistance, self).__init__()
 		self.amplitude_histograms = amplitude_histograms
 		self.E = []
+		self.closest = [] # can be calculated from E as well 
 		print("EarthMovingDistance classifier initialized")
 
 	def _ground_distance(self, histogram1, histogram2):
@@ -94,11 +100,26 @@ class EarthMovingDistance(object):
 			Input: cached amplitude_histograms
 			Output: cached EMD matrix (R x R)
 		"""
-		print("Calculating EMD matrix...")
+		print("Calculating EMD matrix for %d histograms" %(len(self.amplitude_histograms))) 
 		for C_r in self.amplitude_histograms:
 			E_r = []
 			for C_i in self.amplitude_histograms:
-				E_r.append(self._get_emd(C_r,C_i))
+				emd = self._get_emd(C_r,C_i)
+				E_r.append(emd)
+				# print("EMD calculated in current iteration as ", str(emd))
+			E_r_np = np.array(E_r)
+			# calculating the second smallest emd as smallest would be 0
+			closest_activity = E_r_np.argsort()[1] 
+			self.closest.append(closest_activity)
 			self.E.append(np.array(E_r))
 		print("EMD matrix calculated!")
-		return self.E
+		return np.array(self.E)
+
+	def get_closest_activity(self):
+		print("Calculating closest_activity")
+		if not self.E:
+			self.get_EMD_matrix()
+		print("closest_activity calculated")
+		return np.array(self.closest)
+
+

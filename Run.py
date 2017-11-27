@@ -8,6 +8,7 @@ from Utilities import FileUtilities
 # from Utilities import MovingVariance
 from matplotlib import pyplot as plt
 # from InPlace import InPlace
+from Utilities import EarthMovingDistance
 
 # utl = FileUtilities('data1/')
 
@@ -39,20 +40,20 @@ from matplotlib import pyplot as plt
 
 ##################
 
-path = '/Users/Apple/Documents/gitRepo/ra-eeyes-activity-detection/data_small/'
-files = os.listdir(path)
-utl = FileUtilities(path)
-data_matrices = []
-for file in files:
-	df = utl.read_csv(path+file)
-	data = utl.get_data_matrix(df)
-	data_matrices.append(data)
-# print(data_matrices)
-cad = CoarseActivityDetection(data_matrices,450)
-cad.get_cmv_for_all_files()
-# cad.plot_cmvs()
-cad.get_max_variance()
-cad.plot_max_cmvs()
+# path = '/Users/Apple/Documents/gitRepo/ra-eeyes-activity-detection/data_small/'
+# files = os.listdir(path)
+# utl = FileUtilities(path)
+# data_matrices = []
+# for file in files:
+# 	df = utl.read_csv(path+file)
+# 	data = utl.get_data_matrix(df)
+# 	data_matrices.append(data)
+# # print(data_matrices)
+# cad = CoarseActivityDetection(data_matrices,450)
+# cad.get_cmv_for_all_files()
+# # cad.plot_cmvs()
+# cad.get_max_variance()
+# cad.plot_max_cmvs()
 
 
 # cad.get_cmv_for_all_files()
@@ -100,5 +101,30 @@ cad.plot_max_cmvs()
 # plt.bar(pos, freq, width, color = 'g')
 # plt.show()
 
+##################
 
+path = '/Users/Apple/Documents/gitRepo/ra-eeyes-activity-detection/data_input/'
+utl = FileUtilities(path)
+amplitude_matrices = utl.get_amplitude_matrices()
+print("Number of matrices read = ", len(amplitude_matrices))
 
+histograms = []
+for amplitude_matrix in amplitude_matrices:
+	for i in amplitude_matrix:
+		freq = np.zeros(40)
+		for j in i:
+			freq[int(j)] += 1
+	histograms.append(freq)
+
+labels_np = np.array(utl.labels)
+print(utl.labels)
+emd = EarthMovingDistance(histograms)
+emd_matrix = emd.get_EMD_matrix()
+closest_activity = emd.get_closest_activity()
+predicted = labels_np[closest_activity]
+print("______________________ EMD matrix start ______________________")
+print(emd_matrix)
+print("______________________ EMD matrix ends _______________________")
+print("___________________ closest_activity start ___________________")
+print(predicted)
+print("___________________ closest_activity ends ____________________")
